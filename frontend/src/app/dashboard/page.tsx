@@ -8,6 +8,7 @@ import { Badge } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import CommonAppLayout from '@/components/layout/CommonAppLayout'
+import { ProtectedRoute } from '@/components/ProtectedRoute'
 import { useAuth } from '@/contexts/AuthContext'
 
 const StudentDashboard: React.FC = () => {
@@ -161,39 +162,13 @@ const StudentDashboard: React.FC = () => {
         interviewTime: "10:00 AM",
         interviewType: "Virtual"
       }
-    ],
-    notifications: [
-      {
-        id: 1,
-        type: "deadline",
-        title: "Application Deadline Approaching",
-        message: "Your KNUST application deadline is in 5 days",
-        date: "2024-12-20",
-        urgent: true
-      },
-      {
-        id: 2,
-        type: "interview",
-        title: "Interview Scheduled",
-        message: "Ashesi University has scheduled your interview for January 5th",
-        date: "2024-12-18",
-        urgent: false
-      },
-      {
-        id: 3,
-        type: "document",
-        title: "Documents Received",
-        message: "University of Ghana has received your transcripts",
-        date: "2024-12-16",
-        urgent: false
-      }
     ]
   }
 
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'Under Review': return 'bg-blue-100 text-blue-800'
-      case 'Documents Required': return 'bg-orange-100 text-orange-800'
+      case 'Documents Required': return 'bg-blue-100 text-blue-800'
       case 'Interview Scheduled': return 'bg-green-100 text-green-800'
       case 'Accepted': return 'bg-emerald-100 text-emerald-800'
       case 'Rejected': return 'bg-red-100 text-red-800'
@@ -202,97 +177,74 @@ const StudentDashboard: React.FC = () => {
   }
 
   return (
-    <CommonAppLayout>
-      <div className="max-w-7xl mx-auto px-6 py-8">
+    <ProtectedRoute>
+      <CommonAppLayout>
+      <div className="min-h-screen bg-white">
+      <div className="max-w-7xl mx-auto px-6 py-6">
         {/* Welcome Section */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Welcome back, {user?.firstName || 'Student'}! 👋
+        <div className="mb-6">
+          <h1 className="text-2xl font-bold text-gray-900 mb-1">
+            Welcome back, {user?.firstName || 'Student'}!
           </h1>
-          <p className="text-gray-600">
+          <p className="text-sm text-gray-600">
             Track your applications, manage deadlines, and stay updated on your university journey.
           </p>
         </div>
 
         {/* Quick Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
-          <Card className="hover:shadow-lg transition-shadow cursor-pointer" onClick={() => window.location.href = '/my-universities'}>
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-gray-600">My Universities</p>
-                  <p className="text-3xl font-bold text-gray-900">4</p>
-                  <p className="text-xs text-emerald-600 mt-1">3 deadlines approaching</p>
-                </div>
-                <div className="w-12 h-12 bg-emerald-100 rounded-lg flex items-center justify-center">
-                  <span className="text-emerald-600 text-xl">🎓</span>
-                </div>
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-8">
+          <Card className="hover:shadow-md transition-shadow cursor-pointer border border-gray-100" onClick={() => window.location.href = '/my-universities'}>
+            <CardContent className="p-4">
+              <div className="text-center">
+                <p className="text-xs font-medium text-gray-500 mb-1">My Universities</p>
+                <p className="text-2xl font-bold text-gray-900 mb-1">4</p>
+                <p className="text-xs text-emerald-600">3 deadlines approaching</p>
               </div>
             </CardContent>
           </Card>
 
-          <Card className="hover:shadow-lg transition-shadow cursor-pointer" onClick={() => setActiveTab('applications')}>
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-gray-600">Total Applications</p>
-                  <p className="text-3xl font-bold text-gray-900">{studentData.applications.length}</p>
-                  <p className="text-xs text-green-600 mt-1">+1 this month</p>
-                </div>
-                <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                  <span className="text-blue-600 text-xl">📝</span>
-                </div>
+          <Card className="hover:shadow-md transition-shadow cursor-pointer border border-gray-100" onClick={() => setActiveTab('applications')}>
+            <CardContent className="p-4">
+              <div className="text-center">
+                <p className="text-xs font-medium text-gray-500 mb-1">Applications</p>
+                <p className="text-2xl font-bold text-gray-900 mb-1">{studentData.applications.length}</p>
+                <p className="text-xs text-green-600">+1 this month</p>
               </div>
             </CardContent>
           </Card>
 
-          <Card className="hover:shadow-lg transition-shadow cursor-pointer">
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-gray-600">Under Review</p>
-                  <p className="text-3xl font-bold text-gray-900">
-                    {studentData.applications.filter(app => app.status === 'Under Review').length}
-                  </p>
-                  <p className="text-xs text-blue-600 mt-1">Processing</p>
-                </div>
-                <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
-                  <span className="text-orange-600 text-xl">⏳</span>
-                </div>
+          <Card className="hover:shadow-md transition-shadow cursor-pointer border border-gray-100">
+            <CardContent className="p-4">
+              <div className="text-center">
+                <p className="text-xs font-medium text-gray-500 mb-1">Under Review</p>
+                <p className="text-2xl font-bold text-gray-900 mb-1">
+                  {studentData.applications.filter(app => app.status === 'Under Review').length}
+                </p>
+                <p className="text-xs text-blue-600">Processing</p>
               </div>
             </CardContent>
           </Card>
 
-          <Card className="hover:shadow-lg transition-shadow cursor-pointer">
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-gray-600">Interviews</p>
-                  <p className="text-3xl font-bold text-gray-900">
-                    {studentData.applications.filter(app => app.status === 'Interview Scheduled').length}
-                  </p>
-                  <p className="text-xs text-green-600 mt-1">1 upcoming</p>
-                </div>
-                <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
-                  <span className="text-green-600 text-xl">🎤</span>
-                </div>
+          <Card className="hover:shadow-md transition-shadow cursor-pointer border border-gray-100">
+            <CardContent className="p-4">
+              <div className="text-center">
+                <p className="text-xs font-medium text-gray-500 mb-1">Interviews</p>
+                <p className="text-2xl font-bold text-gray-900 mb-1">
+                  {studentData.applications.filter(app => app.status === 'Interview Scheduled').length}
+                </p>
+                <p className="text-xs text-green-600">1 upcoming</p>
               </div>
             </CardContent>
           </Card>
 
-          <Card className="hover:shadow-lg transition-shadow cursor-pointer" onClick={() => setActiveTab('payments')}>
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-gray-600">Total Fees</p>
-                  <p className="text-3xl font-bold text-gray-900">
-                    GHS {studentData.applications.reduce((sum, app) => sum + app.fee, 0)}
-                  </p>
-                  <p className="text-xs text-green-600 mt-1">All paid</p>
-                </div>
-                <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
-                  <span className="text-purple-600 text-xl">💰</span>
-                </div>
+          <Card className="hover:shadow-md transition-shadow cursor-pointer border border-gray-100" onClick={() => setActiveTab('payments')}>
+            <CardContent className="p-4">
+              <div className="text-center">
+                <p className="text-xs font-medium text-gray-500 mb-1">Total Fees</p>
+                <p className="text-2xl font-bold text-gray-900 mb-1">
+                  GHS {studentData.applications.reduce((sum, app) => sum + app.fee, 0)}
+                </p>
+                <p className="text-xs text-green-600">All paid</p>
               </div>
             </CardContent>
           </Card>
@@ -325,7 +277,7 @@ const StudentDashboard: React.FC = () => {
 
         {/* Tab Content */}
         {activeTab === 'overview' && (
-          <div className="space-y-8">
+          <div className="space-y-6">
             {/* My Universities Quick Overview */}
             <Card>
               <CardHeader className="flex flex-row items-center justify-between">
@@ -340,26 +292,26 @@ const StudentDashboard: React.FC = () => {
                 </Button>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
                   {[
                     { name: 'University of Ghana', deadline: 'April 15', status: 'In Progress', daysLeft: 45 },
                     { name: 'KNUST', deadline: 'March 31', status: 'Not Started', daysLeft: 30 },
                     { name: 'Ashesi University', deadline: 'May 1', status: 'Submitted', daysLeft: 61 },
                     { name: 'University of Cape Coast', deadline: 'April 30', status: 'Under Review', daysLeft: 60 }
                   ].map((uni, index) => (
-                    <div key={index} className="border border-gray-200 rounded-lg p-4">
+                    <div key={index} className="border border-gray-100 rounded-lg p-3 hover:border-gray-200 transition-colors">
                       <div className="flex items-start justify-between mb-2">
-                        <h4 className="font-medium text-gray-900 text-sm">{uni.name}</h4>
-                        <Badge className={`text-xs ${
+                        <h4 className="font-medium text-gray-900 text-sm leading-tight">{uni.name}</h4>
+                        <Badge className={`text-xs px-2 py-1 ${
                           uni.status === 'Submitted' ? 'bg-green-100 text-green-800' :
                           uni.status === 'In Progress' ? 'bg-blue-100 text-blue-800' :
-                          uni.status === 'Under Review' ? 'bg-yellow-100 text-yellow-800' :
+                          uni.status === 'Under Review' ? 'bg-blue-100 text-blue-800' :
                           'bg-gray-100 text-gray-800'
                         }`}>
                           {uni.status}
                         </Badge>
                       </div>
-                      <div className="text-xs text-gray-600">
+                      <div className="text-xs text-gray-600 space-y-1">
                         <div>Deadline: {uni.deadline}</div>
                         <div className={uni.daysLeft <= 14 ? 'text-orange-600 font-medium' : 'text-gray-500'}>
                           {uni.daysLeft} days left
@@ -368,13 +320,13 @@ const StudentDashboard: React.FC = () => {
                     </div>
                   ))}
                 </div>
-                <div className="mt-4 flex gap-3">
-                  <Button asChild variant="outline" className="flex-1">
+                <div className="mt-4 flex gap-2">
+                  <Button asChild variant="outline" className="flex-1 text-sm">
                     <Link href="/university-search">
                       + Add Universities
                     </Link>
                   </Button>
-                  <Button asChild className="flex-1 bg-emerald-600 hover:bg-emerald-700">
+                  <Button asChild className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-sm">
                     <Link href="/my-universities">
                       Manage My List
                     </Link>
@@ -397,22 +349,22 @@ const StudentDashboard: React.FC = () => {
                 </Button>
               </CardHeader>
               <CardContent>
-                <div className="space-y-4">
+                <div className="space-y-3">
                   {[
                     { title: 'Personal Statement', status: 'in_progress', wordCount: 423, university: 'Common App' },
                     { title: 'Why University of Ghana?', status: 'completed', wordCount: 587, university: 'UG' },
                     { title: 'Leadership Experience', status: 'not_started', wordCount: 0, university: 'Ashesi' },
                     { title: 'Why KNUST?', status: 'not_started', wordCount: 0, university: 'KNUST' }
                   ].map((essay, index) => (
-                    <div key={index} className="border border-gray-200 rounded-lg p-4">
-                      <div className="flex items-start justify-between mb-2">
+                    <div key={index} className="border border-gray-100 rounded-lg p-3 hover:border-gray-200 transition-colors">
+                      <div className="flex items-start justify-between mb-1">
                         <div className="flex-1">
-                          <h4 className="font-medium text-gray-900 text-sm">{essay.title}</h4>
-                          <p className="text-xs text-gray-600">for {essay.university}</p>
+                          <h4 className="font-medium text-gray-900 text-sm leading-tight">{essay.title}</h4>
+                          <p className="text-xs text-gray-500">for {essay.university}</p>
                         </div>
                         <div className="flex items-center gap-2">
                           <span className="text-xs text-gray-500">{essay.wordCount} words</span>
-                          <Badge className={`text-xs ${
+                          <Badge className={`text-xs px-2 py-1 ${
                             essay.status === 'completed' ? 'bg-green-100 text-green-800' :
                             essay.status === 'in_progress' ? 'bg-blue-100 text-blue-800' :
                             'bg-gray-100 text-gray-800'
@@ -425,7 +377,7 @@ const StudentDashboard: React.FC = () => {
                       {essay.status === 'in_progress' && (
                         <div className="w-full bg-gray-200 rounded-full h-1.5">
                           <div 
-                            className="bg-blue-500 h-1.5 rounded-full"
+                            className="bg-blue-500 h-1.5 rounded-full transition-all duration-300"
                             style={{ width: `${Math.min((essay.wordCount / 650) * 100, 100)}%` }}
                           ></div>
                         </div>
@@ -433,22 +385,22 @@ const StudentDashboard: React.FC = () => {
                     </div>
                   ))}
                 </div>
-                <div className="mt-4 flex gap-3">
-                  <Button asChild variant="outline" className="flex-1">
+                <div className="mt-4 flex gap-2">
+                  <Button asChild variant="outline" className="flex-1 text-sm">
                     <Link href="/essays">
-                      📝 Continue Writing
+                      Continue Writing
                     </Link>
                   </Button>
-                  <Button asChild className="flex-1 bg-purple-600 hover:bg-purple-700">
+                  <Button asChild className="flex-1 bg-purple-600 hover:bg-purple-700 text-sm">
                     <Link href="/essays">
-                      ✍️ Writing Center
+                      Writing Center
                     </Link>
                   </Button>
                 </div>
               </CardContent>
             </Card>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
               {/* Recent Applications */}
             <div className="lg:col-span-2">
               <Card>
@@ -457,27 +409,27 @@ const StudentDashboard: React.FC = () => {
                   <CardDescription>Track the status of your university applications</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="space-y-4">
+                  <div className="space-y-3">
                     {studentData.applications.map(app => (
-                      <div key={app.id} className="border border-gray-200 rounded-lg p-4">
-                        <div className="flex items-center justify-between mb-3">
+                      <div key={app.id} className="border border-gray-100 rounded-lg p-3 hover:border-gray-200 transition-colors">
+                        <div className="flex items-center justify-between mb-2">
                           <div>
-                            <h4 className="font-semibold text-gray-900">{app.university}</h4>
-                            <p className="text-sm text-gray-600">{app.program}</p>
+                            <h4 className="font-semibold text-gray-900 text-sm">{app.university}</h4>
+                            <p className="text-xs text-gray-600">{app.program}</p>
                           </div>
-                          <Badge className={getStatusColor(app.status)}>
+                          <Badge className={getStatusColor(app.status) + ' text-xs px-2 py-1'}>
                             {app.status}
                           </Badge>
                         </div>
                         
-                        <div className="flex items-center justify-between text-sm text-gray-600 mb-3">
+                        <div className="flex items-center justify-between text-xs text-gray-500 mb-2">
                           <span>Submitted: {app.submittedDate}</span>
                           <span>Deadline: {app.deadline}</span>
                         </div>
                         
-                        <div className="w-full bg-gray-200 rounded-full h-2">
+                        <div className="w-full bg-gray-200 rounded-full h-1.5">
                           <div 
-                            className="bg-blue-500 h-2 rounded-full"
+                            className="bg-blue-500 h-1.5 rounded-full transition-all duration-300"
                             style={{ width: `${app.progress}%` }}
                           ></div>
                         </div>
@@ -486,9 +438,9 @@ const StudentDashboard: React.FC = () => {
                     ))}
                   </div>
                   
-                  <div className="mt-6">
+                  <div className="mt-4">
                     <Link href="/common-application">
-                      <Button className="w-full bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white">
+                      <Button className="w-full bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white text-sm">
                         Start New Application
                       </Button>
                     </Link>
@@ -505,19 +457,19 @@ const StudentDashboard: React.FC = () => {
                   <CardDescription>Stay updated on your applications</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="space-y-4">
-                    {studentData.notifications.map(notification => (
-                      <div key={notification.id} className={`border-l-4 pl-4 py-3 ${
+                  <div className="space-y-3">
+                    {notifications.map(notification => (
+                      <div key={notification.id} className={`border-l-4 pl-3 py-2 rounded-r-lg ${
                         notification.urgent ? 'border-red-500 bg-red-50' : 'border-blue-500 bg-blue-50'
                       }`}>
                         <div className="flex items-start justify-between">
                           <div className="flex-1">
-                            <h5 className="font-medium text-gray-900">{notification.title}</h5>
-                            <p className="text-sm text-gray-600 mt-1">{notification.message}</p>
-                            <p className="text-xs text-gray-500 mt-2">{notification.date}</p>
+                            <h5 className="font-medium text-gray-900 text-sm">{notification.title}</h5>
+                            <p className="text-xs text-gray-600 mt-1">{notification.message}</p>
+                            <p className="text-xs text-gray-500 mt-1">{notification.date}</p>
                           </div>
                           {notification.urgent && (
-                            <Badge className="bg-red-100 text-red-800 ml-2">Urgent</Badge>
+                            <Badge className="bg-red-100 text-red-800 ml-2 text-xs px-2 py-1">Urgent</Badge>
                           )}
                         </div>
                       </div>
@@ -647,7 +599,7 @@ const StudentDashboard: React.FC = () => {
                         </Button>
                         {!app.feePaid && (
                           <Link href="/payments" className="flex-1">
-                            <Button className="w-full bg-orange-500 hover:bg-orange-600 text-white text-xs">
+                            <Button className="w-full bg-blue-500 hover:bg-blue-600 text-white text-xs">
                               💳 Pay Fee
                             </Button>
                           </Link>
@@ -745,7 +697,7 @@ const StudentDashboard: React.FC = () => {
                         <span className="text-sm font-medium text-gray-900">{subject.name}</span>
                         <Badge className={`${
                           ['A1', 'B2', 'B3'].includes(subject.grade) ? 'bg-green-100 text-green-800' :
-                          ['C4', 'C5', 'C6'].includes(subject.grade) ? 'bg-yellow-100 text-yellow-800' :
+                          ['C4', 'C5', 'C6'].includes(subject.grade) ? 'bg-blue-100 text-blue-800' :
                           'bg-red-100 text-red-800'
                         }`}>
                           {subject.grade}
@@ -865,7 +817,9 @@ const StudentDashboard: React.FC = () => {
           </div>
         )}
       </div>
+      </div>
     </CommonAppLayout>
+    </ProtectedRoute>
   )
 }
 

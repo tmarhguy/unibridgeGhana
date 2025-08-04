@@ -247,43 +247,31 @@ const PaymentChannelsPage: React.FC = () => {
           </p>
         </div>
 
-        {/* Quick Stats */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-          <Card className="bg-gradient-to-r from-green-500 to-green-600 text-white">
-            <CardContent className="p-4">
-              <div className="text-2xl font-bold mb-1">
-                {PAYMENT_CHANNELS_DATA.filter(c => c.method === 'mobile_money').length}
+        {/* Compact Quick Stats */}
+        <div className="bg-gray-50 rounded-lg p-3 mb-4">
+          <div className="flex items-center justify-between text-xs">
+            <div className="flex gap-4">
+              <div className="text-center">
+                <div className="font-semibold text-green-600">{PAYMENT_CHANNELS_DATA.filter(c => c.method === 'mobile_money').length}</div>
+                <div className="text-gray-500">Mobile</div>
               </div>
-              <div className="text-green-100 text-sm">Mobile Money</div>
-            </CardContent>
-          </Card>
-          
-          <Card className="bg-gradient-to-r from-blue-500 to-blue-600 text-white">
-            <CardContent className="p-4">
-              <div className="text-2xl font-bold mb-1">
-                {PAYMENT_CHANNELS_DATA.filter(c => c.method === 'ussd').length}
+              <div className="text-center">
+                <div className="font-semibold text-blue-600">{PAYMENT_CHANNELS_DATA.filter(c => c.method === 'ussd').length}</div>
+                <div className="text-gray-500">USSD</div>
               </div>
-              <div className="text-blue-100 text-sm">USSD Codes</div>
-            </CardContent>
-          </Card>
-          
-          <Card className="bg-gradient-to-r from-purple-500 to-purple-600 text-white">
-            <CardContent className="p-4">
-              <div className="text-2xl font-bold mb-1">
-                {PAYMENT_CHANNELS_DATA.filter(c => c.method === 'bank').length}
+              <div className="text-center">
+                <div className="font-semibold text-purple-600">{PAYMENT_CHANNELS_DATA.filter(c => c.method === 'bank').length}</div>
+                <div className="text-gray-500">Bank</div>
               </div>
-              <div className="text-purple-100 text-sm">Bank Transfers</div>
-            </CardContent>
-          </Card>
-          
-          <Card className="bg-gradient-to-r from-orange-500 to-orange-600 text-white">
-            <CardContent className="p-4">
-              <div className="text-2xl font-bold mb-1">
-                {PAYMENT_CHANNELS_DATA.filter(c => c.method === 'online').length}
+              <div className="text-center">
+                <div className="font-semibold text-orange-600">{PAYMENT_CHANNELS_DATA.filter(c => c.method === 'online').length}</div>
+                <div className="text-gray-500">Online</div>
               </div>
-              <div className="text-orange-100 text-sm">Online Portals</div>
-            </CardContent>
-          </Card>
+            </div>
+            <div className="text-gray-600">
+              {PAYMENT_CHANNELS_DATA.length} payment methods available
+            </div>
+          </div>
         </div>
 
         {/* Search and Filter */}

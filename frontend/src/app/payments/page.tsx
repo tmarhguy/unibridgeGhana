@@ -8,6 +8,7 @@ import { Badge } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import CommonAppLayout from '@/components/layout/CommonAppLayout'
+import { ProtectedRoute } from '@/components/ProtectedRoute'
 
 interface ApplicationFee {
   id: string
@@ -206,7 +207,8 @@ const PaymentIntegration: React.FC = () => {
     .reduce((sum, fee) => sum + fee.fee, 0)
 
   return (
-    <CommonAppLayout>
+    <ProtectedRoute>
+      <CommonAppLayout>
       <div className="max-w-6xl mx-auto px-6 py-8">
         {/* Payment Overview */}
         <div className="mb-8">
@@ -532,6 +534,7 @@ const PaymentIntegration: React.FC = () => {
         )}
       </div>
     </CommonAppLayout>
+    </ProtectedRoute>
   )
 }
 

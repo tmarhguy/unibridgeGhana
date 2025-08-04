@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
+import CommonAppLayout from '@/components/layout/CommonAppLayout'
 import { ELIGIBILITY_RULES } from '@/data/enhanced-features'
 
 // Grade interfaces
@@ -290,7 +291,8 @@ const EligibilityCheckerPage: React.FC = () => {
   const currentAggregate = calculateAggregate()
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-purple-100 p-6">
+    <CommonAppLayout>
+      <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-purple-100 p-6">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="text-center mb-8">
@@ -304,22 +306,23 @@ const EligibilityCheckerPage: React.FC = () => {
 
         {!showResults ? (
           <div className="space-y-8">
-            {/* Current Aggregate Display */}
-            <Card className="bg-gradient-to-r from-blue-500 to-blue-600 text-white">
-              <CardContent className="p-6">
-                <div className="text-center">
-                  <div className="text-3xl font-bold mb-2">
-                    Current Aggregate: {currentAggregate}
-                  </div>
-                  <div className="text-blue-100">
-                    {currentAggregate <= 24 ? 'Excellent - Qualifies for most programs' :
-                     currentAggregate <= 30 ? 'Good - Qualifies for many programs' :
-                     currentAggregate <= 36 ? 'Fair - Some programs available' :
-                     'Needs improvement for most programs'}
+            {/* Compact Current Aggregate Display */}
+            <div className="bg-gray-50 rounded-lg p-3 mb-4">
+              <div className="flex items-center justify-between text-xs">
+                <div className="flex gap-4">
+                  <div className="text-center">
+                    <div className="font-semibold text-blue-600">{currentAggregate}</div>
+                    <div className="text-gray-500">Aggregate</div>
                   </div>
                 </div>
-              </CardContent>
-            </Card>
+                <div className="text-gray-600">
+                  {currentAggregate <= 24 ? 'Excellent - Qualifies for most programs' :
+                   currentAggregate <= 30 ? 'Good - Qualifies for many programs' :
+                   currentAggregate <= 36 ? 'Fair - Some programs available' :
+                   'Needs improvement for most programs'}
+                </div>
+              </div>
+            </div>
 
             {/* Core Subjects */}
             <Card>
@@ -473,17 +476,20 @@ const EligibilityCheckerPage: React.FC = () => {
           </div>
         ) : (
           <div className="space-y-6">
-            {/* Results Header */}
-            <Card className="bg-gradient-to-r from-purple-500 to-purple-600 text-white">
-              <CardContent className="p-6">
-                <div className="text-center">
-                  <h2 className="text-2xl font-bold mb-2">Eligibility Results</h2>
-                  <div className="text-purple-100">
-                    Your aggregate: {currentAggregate} | Program: {intendedProgram || 'General'}
+            {/* Compact Results Header */}
+            <div className="bg-gray-50 rounded-lg p-3 mb-4">
+              <div className="flex items-center justify-between text-xs">
+                <div className="flex gap-4">
+                  <div className="text-center">
+                    <div className="font-semibold text-purple-600">{currentAggregate}</div>
+                    <div className="text-gray-500">Aggregate</div>
                   </div>
                 </div>
-              </CardContent>
-            </Card>
+                <div className="text-gray-600">
+                  Program: {intendedProgram || 'General'} | Eligibility Results
+                </div>
+              </div>
+            </div>
 
             {/* Results Grid */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -616,6 +622,7 @@ const EligibilityCheckerPage: React.FC = () => {
         )}
       </div>
     </div>
+    </CommonAppLayout>
   )
 }
 

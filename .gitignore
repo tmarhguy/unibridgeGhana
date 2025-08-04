@@ -212,3 +212,32 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Project-specific ignores
+*.log
+frontend.log
+*.temp
+.DS_Store
+Thumbs.db
+
+# Environment files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Build artifacts
+dist/
+build/
+*.tsbuildinfo
+
+# Temporary files
+*.tmp
+*.temp

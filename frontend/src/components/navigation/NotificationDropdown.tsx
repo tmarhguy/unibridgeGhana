@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { useNotifications } from '@/contexts/NotificationContext'
+import { CheckCircle, XCircle, AlertTriangle, Info, Bell } from 'lucide-react'
 
 const NotificationDropdown: React.FC = () => {
   const { notifications, markAsRead, markAllAsRead, removeNotification, unreadCount } = useNotifications()
@@ -12,11 +13,11 @@ const NotificationDropdown: React.FC = () => {
 
   const getNotificationIcon = (type: string) => {
     switch (type) {
-      case 'success': return '✅'
-      case 'error': return '❌'
-      case 'warning': return '⚠️'
-      case 'info': return 'ℹ️'
-      default: return '📢'
+      case 'success': return CheckCircle
+      case 'error': return XCircle
+      case 'warning': return AlertTriangle
+      case 'info': return Info
+      default: return Bell
     }
   }
 
@@ -24,7 +25,7 @@ const NotificationDropdown: React.FC = () => {
     switch (type) {
       case 'success': return 'border-green-200 bg-green-50'
       case 'error': return 'border-red-200 bg-red-50'
-      case 'warning': return 'border-orange-200 bg-orange-50'
+      case 'warning': return 'border-blue-200 bg-blue-50'
       case 'info': return 'border-blue-200 bg-blue-50'
       default: return 'border-gray-200 bg-gray-50'
     }
@@ -50,7 +51,7 @@ const NotificationDropdown: React.FC = () => {
         onClick={() => setIsOpen(!isOpen)}
         className="relative p-2"
       >
-        <span className="text-xl">🔔</span>
+        <Bell className="w-5 h-5 text-gray-600" />
         {unreadCount > 0 && (
           <Badge className="absolute -top-1 -right-1 w-5 h-5 p-0 flex items-center justify-center text-xs bg-red-500 text-white">
             {unreadCount > 9 ? '9+' : unreadCount}
@@ -91,7 +92,7 @@ const NotificationDropdown: React.FC = () => {
             <div className="max-h-80 overflow-y-auto">
               {notifications.length === 0 ? (
                 <div className="p-8 text-center">
-                  <div className="text-4xl mb-2">🔔</div>
+                  <Bell className="w-12 h-12 text-gray-400 mx-auto mb-2" />
                   <p className="text-gray-500">No notifications</p>
                 </div>
               ) : (
@@ -113,9 +114,9 @@ const NotificationDropdown: React.FC = () => {
                         <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
                           getNotificationColor(notification.type)
                         }`}>
-                          <span className="text-sm">
-                            {getNotificationIcon(notification.type)}
-                          </span>
+                          {React.createElement(getNotificationIcon(notification.type), {
+                            className: "w-4 h-4 text-gray-600"
+                          })}
                         </div>
                         
                         <div className="flex-1 min-w-0">

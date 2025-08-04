@@ -7,6 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
 import CommonAppLayout from '@/components/layout/CommonAppLayout'
+import { ProtectedRoute } from '@/components/ProtectedRoute'
 import { COMMON_APPLICATION_SECTIONS, UNIVERSITY_SUPPLEMENTS } from '@/data/common-app-model'
 
 // Type definitions for form fields
@@ -105,7 +106,8 @@ const CommonApplicationPage: React.FC = () => {
   const commonAppCompletion = getCommonAppCompletion()
 
   return (
-    <CommonAppLayout>
+    <ProtectedRoute>
+      <CommonAppLayout>
       <div className="max-w-7xl mx-auto px-6 py-8">
         {/* Modern Breadcrumb */}
         <div className="mb-8">
@@ -882,6 +884,7 @@ const CommonApplicationPage: React.FC = () => {
         <div className="h-20"></div>
       </div>
     </CommonAppLayout>
+    </ProtectedRoute>
   )
 }
 

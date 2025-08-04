@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import CommonAppLayout from '@/components/layout/CommonAppLayout';
 import { 
   Search, 
   MapPin, 
@@ -445,7 +446,8 @@ export default function UniversitiesPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
+    <CommonAppLayout>
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
       {/* Header */}
       <header className="bg-white backdrop-blur-sm border-b border-gray-200 sticky top-0 z-50 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -561,12 +563,12 @@ export default function UniversitiesPage() {
         {searchQuery === '' && selectedCategory === 'ALL' && selectedRegion === 'All Regions' && (
           <div className="mb-12">
             <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center">
-              <Star className="h-6 w-6 text-yellow-500 mr-2" />
+              <Star className="h-6 w-6 text-blue-500 mr-2" />
               Featured Universities
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {featuredUniversities.map((university) => (
-                <Card key={university.id} className="hover:shadow-lg transition-all duration-300 border-2 border-yellow-200 bg-gradient-to-br from-yellow-50 to-orange-50">
+                <Card key={university.id} className="hover:shadow-lg transition-all duration-300 border-2 border-blue-200 bg-gradient-to-br from-blue-50 to-slate-50">
                   <div className="p-6">
                     <div className="flex items-start justify-between mb-4">
                       <div className="flex-1">
@@ -578,7 +580,7 @@ export default function UniversitiesPage() {
                           {university.name}
                         </h3>
                       </div>
-                      <Star className="h-5 w-5 text-yellow-500 flex-shrink-0" />
+                      <Star className="h-5 w-5 text-blue-500 flex-shrink-0" />
                     </div>
 
                     <div className="space-y-3 mb-6">
@@ -753,5 +755,6 @@ export default function UniversitiesPage() {
         )}
       </div>
     </div>
+    </CommonAppLayout>
   );
 }

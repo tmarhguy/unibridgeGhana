@@ -5,6 +5,8 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
+import CommonAppLayout from '@/components/layout/CommonAppLayout'
+import { ProtectedRoute } from '@/components/ProtectedRoute'
 
 // Scholarship interface
 interface Scholarship {
@@ -370,7 +372,9 @@ const ScholarshipsPage: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-50 to-orange-100 p-6">
+    <ProtectedRoute>
+      <CommonAppLayout>
+      <div className="min-h-screen bg-white p-6">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="text-center mb-8">
@@ -382,52 +386,35 @@ const ScholarshipsPage: React.FC = () => {
           </p>
         </div>
 
-        {/* Quick Stats */}
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
-          <Card className="bg-gradient-to-r from-blue-500 to-blue-600 text-white">
-            <CardContent className="p-4">
-              <div className="text-2xl font-bold mb-1">
-                {SCHOLARSHIPS_DATA.filter(s => s.type === 'merit').length}
+        {/* Compact Quick Stats */}
+        <div className="bg-gray-50 rounded-lg p-3 mb-4">
+          <div className="flex items-center justify-between text-xs">
+            <div className="flex gap-4">
+              <div className="text-center">
+                <div className="font-semibold text-blue-600">{SCHOLARSHIPS_DATA.filter(s => s.type === 'merit').length}</div>
+                <div className="text-gray-500">Merit</div>
               </div>
-              <div className="text-blue-100 text-sm">Merit-Based</div>
-            </CardContent>
-          </Card>
-          
-          <Card className="bg-gradient-to-r from-green-500 to-green-600 text-white">
-            <CardContent className="p-4">
-              <div className="text-2xl font-bold mb-1">
-                {SCHOLARSHIPS_DATA.filter(s => s.type === 'need').length}
+              <div className="text-center">
+                <div className="font-semibold text-green-600">{SCHOLARSHIPS_DATA.filter(s => s.type === 'need').length}</div>
+                <div className="text-gray-500">Need</div>
               </div>
-              <div className="text-green-100 text-sm">Need-Based</div>
-            </CardContent>
-          </Card>
-          
-          <Card className="bg-gradient-to-r from-purple-500 to-purple-600 text-white">
-            <CardContent className="p-4">
-              <div className="text-2xl font-bold mb-1">
-                {SCHOLARSHIPS_DATA.filter(s => s.type === 'government').length}
+              <div className="text-center">
+                <div className="font-semibold text-purple-600">{SCHOLARSHIPS_DATA.filter(s => s.type === 'government').length}</div>
+                <div className="text-gray-500">Gov</div>
               </div>
-              <div className="text-purple-100 text-sm">Government</div>
-            </CardContent>
-          </Card>
-          
-          <Card className="bg-gradient-to-r from-orange-500 to-orange-600 text-white">
-            <CardContent className="p-4">
-              <div className="text-2xl font-bold mb-1">
-                {SCHOLARSHIPS_DATA.filter(s => s.amount.includes('Full')).length}
+              <div className="text-center">
+                <div className="font-semibold text-orange-600">{SCHOLARSHIPS_DATA.filter(s => s.amount.includes('Full')).length}</div>
+                <div className="text-gray-500">Full</div>
               </div>
-              <div className="text-orange-100 text-sm">Full Coverage</div>
-            </CardContent>
-          </Card>
-          
-          <Card className="bg-gradient-to-r from-red-500 to-red-600 text-white">
-            <CardContent className="p-4">
-              <div className="text-2xl font-bold mb-1">
-                {SCHOLARSHIPS_DATA.filter(s => isDeadlineSoon(s.deadline)).length}
+              <div className="text-center">
+                <div className="font-semibold text-red-600">{SCHOLARSHIPS_DATA.filter(s => isDeadlineSoon(s.deadline)).length}</div>
+                <div className="text-gray-500">Soon</div>
               </div>
-              <div className="text-red-100 text-sm">Closing Soon</div>
-            </CardContent>
-          </Card>
+            </div>
+            <div className="text-gray-600">
+              {SCHOLARSHIPS_DATA.length} scholarships available
+            </div>
+          </div>
         </div>
 
         {/* Search and Filter */}
@@ -645,6 +632,8 @@ const ScholarshipsPage: React.FC = () => {
         </Card>
       </div>
     </div>
+    </CommonAppLayout>
+    </ProtectedRoute>
   )
 }
 

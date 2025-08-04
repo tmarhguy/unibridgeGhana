@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import CommonAppLayout from '@/components/layout/CommonAppLayout'
+import { ProtectedRoute } from '@/components/ProtectedRoute'
 
 interface DocumentType {
   id: string
@@ -208,7 +209,8 @@ const DocumentUpload: React.FC = () => {
   const verifiedDocs = uploadedDocuments.filter(doc => doc.status === 'verified').length
 
   return (
-    <CommonAppLayout>
+    <ProtectedRoute>
+      <CommonAppLayout>
       <div className="max-w-4xl mx-auto px-6 py-8">
         {/* Progress Overview */}
         <div className="mb-8">
@@ -387,6 +389,7 @@ const DocumentUpload: React.FC = () => {
         </div>
       </div>
     </CommonAppLayout>
+    </ProtectedRoute>
   )
 }
 

@@ -2,50 +2,93 @@
 @tailwind components;
 @tailwind utilities;
 
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* CommonApp-inspired Green Design System */
+    --background: 0 0% 100%; /* #ffffff - pure white */
+    --foreground: 0 0% 13%; /* #212121 */
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card-foreground: 0 0% 13%;
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 210 40% 96%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-    --muted: 210 40% 96%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
-    --radius: 0.5rem;
+    --popover-foreground: 0 0% 13%;
+    
+    /* Green Primary Theme */
+    --primary: 142 72% 29%; /* #16A34A - green-600 */
+    --primary-foreground: 0 0% 100%;
+    --primary-light: 142 69% 58%; /* #22C55E - green-500 */
+    --primary-dark: 142 85% 24%; /* #15803D - green-700 */
+    
+    /* Neutral Colors (CommonApp inspired) */
+    --neutral-50: 0 0% 98%; /* #fafafa */
+    --neutral-100: 0 0% 96%; /* #f5f5f5 */
+    --neutral-200: 0 0% 90%; /* #e5e5e5 */
+    --neutral-300: 0 0% 83%; /* #d4d4d4 */
+    --neutral-400: 0 0% 64%; /* #a3a3a3 */
+    --neutral-500: 0 0% 45%; /* #737373 */
+    --neutral-600: 0 0% 32%; /* #525252 */
+    --neutral-700: 0 0% 25%; /* #404040 */
+    --neutral-800: 0 0% 15%; /* #262626 */
+    --neutral-900: 0 0% 9%; /* #171717 */
+    
+    --secondary: 142 30% 97%; /* #f0fdf4 - very light green */
+    --secondary-foreground: 0 0% 13%;
+    --muted: 0 0% 96%;
+    --muted-foreground: 0 0% 45%;
+    --accent: 142 52% 96%; /* #d1fae5 - light green for highlights */
+    --accent-foreground: 142 85% 24%;
+    
+    /* Status Colors */
+    --success: 142 72% 29%; /* Same as primary green */
+    --success-foreground: 0 0% 100%;
+    --warning: 25 95% 53%; /* #f59e0b */
+    --warning-foreground: 0 0% 13%;
+    --destructive: 0 84% 60%; /* #ef4444 */
+    --destructive-foreground: 0 0% 100%;
+    
+    /* Form Elements */
+    --border: 0 0% 90%; /* #e5e5e5 */
+    --input: 0 0% 100%;
+    --input-border: 0 0% 13%; /* Dark border like CommonApp */
+    --ring: 142 72% 29%;
+    --radius: 0.75rem; /* 12px for cards */
+    --radius-button: 0.5rem; /* 8px for buttons */
+    
+    /* Shadows */
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    
+    /* Typography Scale (CommonApp inspired) */
+    --font-size-xs: 0.75rem; /* 12px */
+    --font-size-sm: 0.875rem; /* 14px */
+    --font-size-base: 1rem; /* 16px */
+    --font-size-lg: 1.125rem; /* 18px */
+    --font-size-xl: 1.25rem; /* 20px */
+    --font-size-2xl: 1.5rem; /* 24px */
+    --font-size-3xl: 1.875rem; /* 30px */
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
+    --background: 0 0% 9%;
+    --foreground: 0 0% 98%;
+    --card: 0 0% 9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 0 0% 9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 142 69% 58%;
+    --primary-foreground: 0 0% 9%;
+    --secondary: 0 0% 15%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 0 0% 15%;
+    --muted-foreground: 0 0% 64%;
+    --accent: 0 0% 15%;
+    --accent-foreground: 0 0% 98%;
+    --border: 0 0% 15%;
+    --input: 0 0% 15%;
+    --ring: 142 69% 58%;
   }
 }
 
@@ -53,7 +96,58 @@
   * {
     @apply border-border;
   }
+  
   body {
     @apply bg-background text-foreground;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+    line-height: 1.5;
+  }
+  
+  /* CommonApp-style form elements */
+  .ca-input {
+    @apply w-full rounded-lg border border-gray-900 bg-white px-3 py-2 text-base font-normal text-gray-900 placeholder:text-gray-500 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20;
+  }
+  
+  .ca-label {
+    @apply block text-base font-normal text-gray-900 mb-1;
+  }
+  
+  .ca-button-primary {
+    @apply inline-flex items-center justify-center rounded-lg bg-gray-900 px-6 py-2.5 text-sm font-semibold text-white transition-all hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:ring-offset-2 disabled:opacity-50;
+  }
+  
+  .ca-button-secondary {
+    @apply inline-flex items-center justify-center rounded-lg border border-gray-300 bg-white px-6 py-2.5 text-sm font-semibold text-gray-700 transition-all hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2;
+  }
+  
+  .ca-card {
+    @apply rounded-xl bg-white p-6 shadow-sm border border-gray-200;
+  }
+  
+  .ca-sidebar-item {
+    @apply flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all hover:bg-accent;
+  }
+  
+  .ca-sidebar-item-active {
+    @apply bg-accent text-accent-foreground font-semibold;
+  }
+  
+  /* Progress bar styles */
+  .ca-progress-bar {
+    @apply w-full bg-gray-200 rounded-full h-2;
+  }
+  
+  .ca-progress-fill {
+    @apply bg-primary h-2 rounded-full transition-all duration-300;
+  }
+  
+  /* Status badges */
+  .ca-status-complete {
+    @apply inline-flex items-center gap-1 rounded-full bg-green-100 px-2.5 py-1 text-xs font-medium text-green-700;
+  }
+  
+  .ca-status-incomplete {
+    @apply inline-flex items-center gap-1 rounded-full bg-gray-100 px-2.5 py-1 text-xs font-medium text-gray-600;
   }
 }

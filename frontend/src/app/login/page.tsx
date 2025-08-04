@@ -25,7 +25,12 @@ export default function LoginPage() {
 
     try {
       await login(email, password)
-      router.push("/dashboard")
+      
+      // Check for redirect parameter
+      const urlParams = new URLSearchParams(window.location.search)
+      const redirectTo = urlParams.get('redirect') || '/dashboard'
+      
+      router.push(redirectTo)
     } catch (error) {
       console.error("Login failed:", error)
       setError("Invalid email or password. Please try again.")

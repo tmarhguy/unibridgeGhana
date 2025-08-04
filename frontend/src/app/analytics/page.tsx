@@ -6,6 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
 import CommonAppLayout from '@/components/layout/CommonAppLayout'
+import { ProtectedRoute } from '@/components/ProtectedRoute'
 import { ADVANCED_FILTERS, PAYMENT_CHANNELS, UNIVERSITY_ANALYTICS } from '@/data/enhanced-features'
 
 // Icons (you can replace with actual icon library)
@@ -22,7 +23,8 @@ export default function UniversityAnalyticsPage() {
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('ALL')
 
   return (
-    <CommonAppLayout>
+    <ProtectedRoute>
+      <CommonAppLayout>
       <div className="max-w-7xl mx-auto px-6 py-6">
         {/* Header */}
         <div className="text-center mb-8">
@@ -34,35 +36,31 @@ export default function UniversityAnalyticsPage() {
           </p>
         </div>
 
-        {/* Quick Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <Card className="bg-gradient-to-r from-blue-500 to-blue-600 text-white">
-            <CardContent className="p-6">
-              <div className="text-3xl font-bold mb-2">{UNIVERSITY_ANALYTICS.total_institutions}</div>
-              <div className="text-blue-100">Total Institutions</div>
-            </CardContent>
-          </Card>
-          
-          <Card className="bg-gradient-to-r from-green-500 to-green-600 text-white">
-            <CardContent className="p-6">
-              <div className="text-3xl font-bold mb-2">{UNIVERSITY_ANALYTICS.breakdown.public}</div>
-              <div className="text-green-100">Public Universities</div>
-            </CardContent>
-          </Card>
-          
-          <Card className="bg-gradient-to-r from-purple-500 to-purple-600 text-white">
-            <CardContent className="p-6">
-              <div className="text-3xl font-bold mb-2">{UNIVERSITY_ANALYTICS.breakdown.private}</div>
-              <div className="text-purple-100">Private Universities</div>
-            </CardContent>
-          </Card>
-          
-          <Card className="bg-gradient-to-r from-orange-500 to-orange-600 text-white">
-            <CardContent className="p-6">
-              <div className="text-3xl font-bold mb-2">10</div>
-              <div className="text-orange-100">Regions Covered</div>
-            </CardContent>
-          </Card>
+        {/* Compact Quick Stats */}
+        <div className="bg-gray-50 rounded-lg p-3 mb-4">
+          <div className="flex items-center justify-between text-xs">
+            <div className="flex gap-4">
+              <div className="text-center">
+                <div className="font-semibold text-blue-600">{UNIVERSITY_ANALYTICS.total_institutions}</div>
+                <div className="text-gray-500">Total</div>
+              </div>
+              <div className="text-center">
+                <div className="font-semibold text-green-600">{UNIVERSITY_ANALYTICS.breakdown.public}</div>
+                <div className="text-gray-500">Public</div>
+              </div>
+              <div className="text-center">
+                <div className="font-semibold text-purple-600">{UNIVERSITY_ANALYTICS.breakdown.private}</div>
+                <div className="text-gray-500">Private</div>
+              </div>
+              <div className="text-center">
+                <div className="font-semibold text-orange-600">10</div>
+                <div className="text-gray-500">Regions</div>
+              </div>
+            </div>
+            <div className="text-gray-600">
+              Analytics for {UNIVERSITY_ANALYTICS.total_institutions}+ institutions
+            </div>
+          </div>
         </div>
 
         {/* Search and Filter Bar */}
@@ -184,14 +182,14 @@ export default function UniversityAnalyticsPage() {
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {/* Mobile Money */}
-              <div className="bg-gradient-to-br from-yellow-50 to-yellow-100 p-6 rounded-lg">
+              <div className="bg-gradient-to-br from-blue-50 to-blue-100 p-6 rounded-lg">
                 <div className="flex items-center gap-3 mb-4">
                   <MobileIcon />
                   <h3 className="text-lg font-semibold">Mobile Money</h3>
                 </div>
                 <div className="space-y-2">
                   <div className="text-sm text-gray-600">Supported Universities:</div>
-                  <Badge className="bg-yellow-500 text-white">
+                  <Badge className="bg-blue-500 text-white">
                     {PAYMENT_CHANNELS.momo.supported_universities} institutions
                   </Badge>
                   <div className="text-xs text-gray-500 mt-2">
@@ -293,5 +291,6 @@ export default function UniversityAnalyticsPage() {
         </Card>
       </div>
     </CommonAppLayout>
+    </ProtectedRoute>
   )
 }

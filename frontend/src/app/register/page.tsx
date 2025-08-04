@@ -50,8 +50,11 @@ export default function RegisterPage() {
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 1000))
       
-      // Redirect to profile setup on success
-      router.push("/profile-setup")
+      // Check for redirect parameter or go to dashboard
+      const urlParams = new URLSearchParams(window.location.search)
+      const redirectTo = urlParams.get('redirect') || '/dashboard'
+      
+      router.push(redirectTo)
     } catch (error) {
       console.error("Registration failed:", error)
     } finally {

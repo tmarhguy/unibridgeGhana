@@ -7,6 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
 import CommonAppLayout from '@/components/layout/CommonAppLayout'
+import { ProtectedRoute } from '@/components/ProtectedRoute'
 
 interface University {
   id: string
@@ -28,6 +29,169 @@ interface University {
   logoUrl?: string
   website: string
   ranking?: number
+}
+
+// Compact University Card Component
+interface UniversityCardProps {
+  university: University
+  daysUntilDeadline: number
+  isDeadlineSoon: boolean
+  isOverdue: boolean
+  onRemove: () => void
+  getStatusColor: (status: string) => string
+  getDecisionColor: (decision: string | undefined) => string
+}
+
+const UniversityCard: React.FC<UniversityCardProps> = ({
+  university,
+  daysUntilDeadline,
+  isDeadlineSoon,
+  isOverdue,
+  onRemove,
+  getStatusColor,
+  getDecisionColor
+}) => {
+  const [isExpanded, setIsExpanded] = useState(false)
+
+  return (
+    <div className={`bg-white border rounded-lg transition-all hover:shadow-sm border-gray-200`}>
+      {/* Compact Header - Always Visible */}
+      <div 
+        className="flex items-center justify-between p-3 cursor-pointer hover:bg-gray-50"
+        onClick={() => setIsExpanded(!isExpanded)}
+      >
+        <div className="flex items-center gap-3 flex-1 min-w-0">
+          <h3 className="font-medium text-gray-900 truncate">{university.name}</h3>
+        </div>
+        
+        <div className="flex items-center gap-2">
+          <svg 
+            className={`w-4 h-4 text-gray-400 transition-transform ${isExpanded ? 'rotate-180' : ''}`}
+            fill="none" 
+            viewBox="0 0 24 24" 
+            stroke="currentColor"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+          </svg>
+        </div>
+      </div>
+
+      {/* Expanded Details */}
+      {isExpanded && (
+        <div className="px-3 pb-3 border-t border-gray-100 bg-gray-50">
+          <div className="pt-3 space-y-3">
+            {/* Status Information */}
+            <div className="flex items-center gap-2 pb-2 border-b border-gray-200">
+              <span className="text-sm text-gray-600">Status:</span>
+              <Badge className={`${getStatusColor(university.applicationStatus)} text-xs`}>
+                {university.applicationStatus}
+              </Badge>
+              {university.decision && (
+                <Badge className={`${getDecisionColor(university.decision)} text-xs`} variant="outline">
+                  {university.decision}
+                </Badge>
+              )}
+              {(isDeadlineSoon || isOverdue) && (
+                <span className={`text-xs px-2 py-1 rounded-full ml-2 ${
+                  isOverdue ? 'bg-red-100 text-red-700' : 'bg-orange-100 text-orange-700'
+                }`}>
+                  {isOverdue 
+                    ? `${Math.abs(daysUntilDeadline)} days overdue`
+                    : `${daysUntilDeadline} days left`
+                  }
+                </span>
+              )}
+            </div>
+
+            {/* University Details */}
+            <div className="grid grid-cols-2 gap-4 text-sm">
+              <div>
+                <span className="text-gray-600">Location:</span>
+                <span className="ml-1 font-medium">{university.location}</span>
+              </div>
+              <div>
+                <span className="text-gray-600">Type:</span>
+                <span className={`ml-1 font-medium ${
+                  university.type === 'Public' ? 'text-blue-700' : 'text-purple-700'
+                }`}>
+                  {university.type}
+                </span>
+              </div>
+              <div>
+                <span className="text-gray-600">Fee:</span>
+                <span className="ml-1 font-medium text-gray-900">GHS {university.applicationFee}</span>
+              </div>
+              <div>
+                <span className="text-gray-600">Deadline:</span>
+                <span className={`ml-1 font-medium ${
+                  isOverdue ? 'text-red-600' : isDeadlineSoon ? 'text-orange-600' : 'text-gray-900'
+                }`}>
+                  {university.deadline.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                </span>
+              </div>
+            </div>
+
+            {/* Program & Requirements */}
+            {university.selectedProgram && (
+              <div className="text-sm">
+                <span className="text-gray-600">Program:</span>
+                <span className="ml-1 font-medium text-gray-900">{university.selectedProgram}</span>
+              </div>
+            )}
+            
+            <div className="text-sm">
+              <span className="text-gray-600">Min Grade:</span>
+              <span className="ml-1 font-medium text-gray-900">{university.requirements.minimumGrade}</span>
+            </div>
+
+            {/* Actions */}
+            <div className="flex items-center justify-between pt-2 border-t border-gray-200">
+              <div className="flex gap-2">
+                {university.applicationStatus === 'Not Started' && (
+                  <Button asChild size="sm" className="bg-blue-600 hover:bg-blue-700 h-8 px-3 text-xs">
+                    <Link href={`/common-application?university=${university.id}`}>
+                      Start Application
+                    </Link>
+                  </Button>
+                )}
+                {university.applicationStatus === 'In Progress' && (
+                  <Button asChild size="sm" className="bg-emerald-600 hover:bg-emerald-700 h-8 px-3 text-xs">
+                    <Link href={`/common-application?university=${university.id}`}>
+                      Continue
+                    </Link>
+                  </Button>
+                )}
+                {(university.applicationStatus === 'Submitted' || university.applicationStatus === 'Under Review' || university.applicationStatus === 'Decided') && (
+                  <Button asChild size="sm" variant="outline" className="h-8 px-3 text-xs">
+                    <Link href={`/applications/${university.id}`}>
+                      View Application
+                    </Link>
+                  </Button>
+                )}
+                <Button asChild size="sm" variant="outline" className="h-8 px-3 text-xs">
+                  <Link href={`/university-search?id=${university.id}`}>
+                    Details
+                  </Link>
+                </Button>
+              </div>
+              
+              <Button 
+                size="sm"
+                variant="outline" 
+                className="text-red-600 hover:text-red-700 hover:bg-red-50 h-8 w-8 p-0"
+                onClick={(e) => {
+                  e.stopPropagation()
+                  onRemove()
+                }}
+              >
+                ×
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  )
 }
 
 const MyUniversities: React.FC = () => {
@@ -123,7 +287,7 @@ const MyUniversities: React.FC = () => {
       case 'Submitted':
         return 'bg-green-100 text-green-800'
       case 'Under Review':
-        return 'bg-yellow-100 text-yellow-800'
+        return 'bg-blue-100 text-blue-800'
       case 'Decided':
         return 'bg-purple-100 text-purple-800'
       default:
@@ -183,7 +347,9 @@ const MyUniversities: React.FC = () => {
   ).length
 
   return (
-    <CommonAppLayout>
+    <ProtectedRoute>
+      <CommonAppLayout>
+      <div className="min-h-screen bg-white">
       <div className="max-w-7xl mx-auto px-6 py-8">
         {/* Header */}
         <div className="mb-8">
@@ -192,208 +358,127 @@ const MyUniversities: React.FC = () => {
             Manage your university applications, track deadlines, and monitor your progress
           </p>
 
-          {/* Summary Stats */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-            <Card>
-              <CardContent className="p-4 text-center">
-                <div className="text-2xl font-bold text-blue-600">{myUniversities.length}</div>
-                <div className="text-sm text-gray-600">Universities Added</div>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardContent className="p-4 text-center">
-                <div className="text-2xl font-bold text-green-600">{submittedApplications}</div>
-                <div className="text-sm text-gray-600">Applications Submitted</div>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardContent className="p-4 text-center">
-                <div className="text-2xl font-bold text-orange-600">GHS {totalApplicationFees}</div>
-                <div className="text-sm text-gray-600">Total Application Fees</div>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardContent className="p-4 text-center">
-                <div className="text-2xl font-bold text-purple-600">
-                  {myUniversities.filter(uni => uni.decision === 'Admitted').length}
+          {/* Compact Overview & Stats - Single Container */}
+          {myUniversities.length > 0 && (
+            <div className="bg-gray-50 rounded-lg p-3 mb-4">
+              <div className="flex items-center justify-between">
+                {/* Left: College List Pills */}
+                <div className="flex-1">
+                  <div className="flex flex-wrap gap-1 mb-2">
+                    {myUniversities.map((uni) => {
+                      const daysUntilDeadline = Math.ceil((uni.deadline.getTime() - new Date().getTime()) / (1000 * 3600 * 24))
+                      const isOverdue = daysUntilDeadline < 0
+                      const isDeadlineSoon = daysUntilDeadline <= 7 && daysUntilDeadline >= 0
+                      
+                      return (
+                        <span
+                          key={uni.id}
+                          className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium border ${
+                            uni.decision === 'Admitted' ? 'bg-green-100 text-green-800 border-green-200' :
+                            uni.decision === 'Rejected' ? 'bg-red-100 text-red-800 border-red-200' :
+                            uni.decision === 'Waitlisted' ? 'bg-yellow-100 text-yellow-800 border-yellow-200' :
+                            isOverdue ? 'bg-red-50 text-red-700 border-red-200' :
+                            isDeadlineSoon ? 'bg-orange-50 text-orange-700 border-orange-200' :
+                            uni.applicationStatus === 'Submitted' ? 'bg-blue-100 text-blue-800 border-blue-200' :
+                            uni.applicationStatus === 'In Progress' ? 'bg-purple-100 text-purple-800 border-purple-200' :
+                            'bg-gray-100 text-gray-800 border-gray-200'
+                          }`}
+                        >
+                          {uni.shortName || uni.name.split(' ').map(word => word[0]).join('')}
+                          {uni.decision && (
+                            <span className="ml-1 text-xs">
+                              {uni.decision === 'Admitted' ? '✓' : 
+                               uni.decision === 'Rejected' ? '✗' : 
+                               uni.decision === 'Waitlisted' ? '⏳' : ''}
+                            </span>
+                          )}
+                        </span>
+                      )
+                    })}
+                  </div>
+                  <div className="text-xs text-gray-600">
+                    {myUniversities.length} universities • {myUniversities.filter(uni => uni.applicationStatus === 'Submitted' || uni.applicationStatus === 'Under Review' || uni.applicationStatus === 'Decided').length} submitted • {myUniversities.filter(uni => uni.decision === 'Admitted').length} admitted
+                  </div>
                 </div>
-                <div className="text-sm text-gray-600">Acceptances</div>
-              </CardContent>
-            </Card>
-          </div>
+
+                {/* Right: Quick Stats */}
+                <div className="flex gap-4 text-xs">
+                  <div className="text-center">
+                    <div className="font-semibold text-blue-600">{myUniversities.length}</div>
+                    <div className="text-gray-500">Unis</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="font-semibold text-green-600">{myUniversities.filter(uni => uni.applicationStatus === 'Submitted' || uni.applicationStatus === 'Under Review' || uni.applicationStatus === 'Decided').length}</div>
+                    <div className="text-gray-500">Sent</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="font-semibold text-orange-600">GHS {totalApplicationFees}</div>
+                    <div className="text-gray-500">Fees</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="font-semibold text-purple-600">{myUniversities.filter(uni => uni.decision === 'Admitted').length}</div>
+                    <div className="text-gray-500">In</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
 
-        {/* Controls */}
-        <div className="mb-6 flex flex-col md:flex-row gap-4 items-center justify-between">
-          <div className="flex flex-col md:flex-row gap-4 items-center">
-            <Input
-              placeholder="Search universities..."
+        {/* Controls - Compact Layout */}
+        <div className="flex items-center gap-2 justify-between bg-gray-50 p-2 rounded-lg mb-4">
+          <div className="flex items-center gap-2 flex-1">
+            <input
+              type="text"
+              placeholder="Search..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full md:w-64"
+              className="px-2 py-1 border border-gray-300 rounded text-xs focus:outline-none focus:ring-1 focus:ring-emerald-500 w-32"
             />
             <select
               value={filterBy}
-              onChange={(e) => setFilterBy(e.target.value as any)}
-              className="px-3 py-2 border border-gray-300 rounded-md"
+              onChange={(e) => setFilterBy(e.target.value as 'all' | 'public' | 'private')}
+              className="px-2 py-1 border border-gray-300 rounded text-xs focus:outline-none focus:ring-1 focus:ring-emerald-500"
             >
               <option value="all">All Types</option>
-              <option value="public">Public Universities</option>
-              <option value="private">Private Universities</option>
+              <option value="public">Public</option>
+              <option value="private">Private</option>
             </select>
             <select
               value={sortBy}
-              onChange={(e) => setSortBy(e.target.value as any)}
-              className="px-3 py-2 border border-gray-300 rounded-md"
+              onChange={(e) => setSortBy(e.target.value as 'deadline' | 'fee' | 'status' | 'alphabetical')}
+              className="px-2 py-1 border border-gray-300 rounded text-xs focus:outline-none focus:ring-1 focus:ring-emerald-500"
             >
-              <option value="deadline">Sort by Deadline</option>
-              <option value="fee">Sort by Application Fee</option>
-              <option value="status">Sort by Status</option>
-              <option value="alphabetical">Sort Alphabetically</option>
+              <option value="deadline">By Deadline</option>
+              <option value="status">By Status</option>
+              <option value="alphabetical">Alphabetical</option>
             </select>
           </div>
-          <Button asChild className="bg-emerald-600 hover:bg-emerald-700">
+          <Button asChild className="bg-emerald-600 hover:bg-emerald-700 text-xs px-3 py-1 h-auto">
             <Link href="/university-search">
-              + Add Universities
+              + Add
             </Link>
           </Button>
         </div>
 
         {/* Universities List */}
-        <div className="space-y-4">
+        <div className="space-y-2">
           {sortedAndFilteredUniversities.map((university) => {
             const daysUntilDeadline = getDaysUntilDeadline(university.deadline)
             const isDeadlineSoon = daysUntilDeadline <= 7 && daysUntilDeadline > 0
             const isOverdue = daysUntilDeadline < 0
 
             return (
-              <Card key={university.id} className={`transition-all hover:shadow-md ${
-                isDeadlineSoon ? 'border-orange-200 bg-orange-50' : 
-                isOverdue ? 'border-red-200 bg-red-50' : ''
-              }`}>
-                <CardHeader>
-                  <div className="flex items-start justify-between">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-3 mb-2">
-                        <CardTitle className="text-xl">{university.name}</CardTitle>
-                        <Badge variant="outline" className={
-                          university.type === 'Public' ? 'border-blue-200 text-blue-700' : 'border-purple-200 text-purple-700'
-                        }>
-                          {university.type}
-                        </Badge>
-                        {university.ranking && (
-                          <Badge variant="outline" className="border-gray-200 text-gray-600">
-                            #{university.ranking} in Ghana
-                          </Badge>
-                        )}
-                      </div>
-                      <p className="text-gray-600 mb-2">{university.location}</p>
-                      {university.selectedProgram && (
-                        <p className="text-sm font-medium text-gray-800">
-                          Selected Program: {university.selectedProgram}
-                        </p>
-                      )}
-                    </div>
-                    <div className="flex flex-col items-end gap-2">
-                      <Badge className={getStatusColor(university.applicationStatus)}>
-                        {university.applicationStatus}
-                      </Badge>
-                      {university.decision && (
-                        <Badge className={getDecisionColor(university.decision)} variant="outline">
-                          {university.decision}
-                        </Badge>
-                      )}
-                    </div>
-                  </div>
-                </CardHeader>
-
-                <CardContent className="space-y-4">
-                  {/* Key Info Grid */}
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 bg-gray-50 rounded-lg">
-                    <div>
-                      <div className="text-sm text-gray-600">Application Fee</div>
-                      <div className="font-semibold text-lg">GHS {university.applicationFee}</div>
-                    </div>
-                    <div>
-                      <div className="text-sm text-gray-600">Deadline</div>
-                      <div className={`font-semibold text-lg ${
-                        isOverdue ? 'text-red-600' : isDeadlineSoon ? 'text-orange-600' : 'text-gray-900'
-                      }`}>
-                        {university.deadline.toLocaleDateString()}
-                        <div className="text-xs text-gray-500">
-                          {isOverdue 
-                            ? `${Math.abs(daysUntilDeadline)} days overdue`
-                            : `${daysUntilDeadline} days left`
-                          }
-                        </div>
-                      </div>
-                    </div>
-                    <div>
-                      <div className="text-sm text-gray-600">Minimum Requirement</div>
-                      <div className="font-semibold text-lg">{university.requirements.minimumGrade}</div>
-                    </div>
-                  </div>
-
-                  {/* Requirements */}
-                  <div>
-                    <h4 className="font-medium text-gray-900 mb-2">Required Documents</h4>
-                    <div className="flex flex-wrap gap-2">
-                      {university.requirements.requiredDocuments.map((doc, index) => (
-                        <Badge key={index} variant="outline" className="text-xs">
-                          {doc}
-                        </Badge>
-                      ))}
-                    </div>
-                    {university.requirements.additionalRequirements && (
-                      <div className="mt-2">
-                        <div className="text-sm text-gray-600">Additional Requirements:</div>
-                        <ul className="text-sm text-gray-700 list-disc list-inside">
-                          {university.requirements.additionalRequirements.map((req, index) => (
-                            <li key={index}>{req}</li>
-                          ))}
-                        </ul>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Action Buttons */}
-                  <div className="flex flex-wrap gap-3 pt-4 border-t">
-                    {university.applicationStatus === 'Not Started' && (
-                      <Button asChild className="bg-blue-600 hover:bg-blue-700">
-                        <Link href={`/common-application?university=${university.id}`}>
-                          Start Application
-                        </Link>
-                      </Button>
-                    )}
-                    {university.applicationStatus === 'In Progress' && (
-                      <Button asChild className="bg-emerald-600 hover:bg-emerald-700">
-                        <Link href={`/common-application?university=${university.id}`}>
-                          Continue Application
-                        </Link>
-                      </Button>
-                    )}
-                    {(university.applicationStatus === 'Submitted' || university.applicationStatus === 'Under Review' || university.applicationStatus === 'Decided') && (
-                      <Button asChild variant="outline">
-                        <Link href={`/applications/${university.id}`}>
-                          View Application
-                        </Link>
-                      </Button>
-                    )}
-                    <Button asChild variant="outline">
-                      <Link href={`/university-search?id=${university.id}`}>
-                        View Details
-                      </Link>
-                    </Button>
-                    <Button 
-                      variant="outline" 
-                      className="text-red-600 hover:text-red-700 hover:bg-red-50"
-                      onClick={() => removeUniversity(university.id)}
-                    >
-                      Remove
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
+              <UniversityCard 
+                key={university.id}
+                university={university}
+                daysUntilDeadline={daysUntilDeadline}
+                isDeadlineSoon={isDeadlineSoon}
+                isOverdue={isOverdue}
+                onRemove={() => removeUniversity(university.id)}
+                getStatusColor={getStatusColor}
+                getDecisionColor={getDecisionColor}
+              />
             )
           })}
         </div>
@@ -440,7 +525,9 @@ const MyUniversities: React.FC = () => {
           </div>
         </div>
       </div>
+      </div>
     </CommonAppLayout>
+    </ProtectedRoute>
   )
 }
 
