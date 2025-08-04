@@ -16,7 +16,6 @@
   <h3>Ghana's first centralized university admissions platform, revolutionizing how students apply to tertiary institutions across the country.</h3>
   <p>UniBridge provides a streamlined, one-application solution for 100+ universities, integrated scholarship search, and comprehensive progress tracking.</p>
   
-  <p><strong>📚 Academic & Portfolio Project</strong> - Created for educational and demonstration purposes</p>
 </div>
 
 ## Table of Contents
