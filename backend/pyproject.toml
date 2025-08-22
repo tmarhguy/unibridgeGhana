@@ -74,6 +74,18 @@ unibridge = "app.main:main"
 [tool.hatch.metadata]
 allow-direct-references = true
 
+[tool.hatch.build.targets.wheel]
+# Explicitly include the FastAPI app package so editable builds succeed in CI
+packages = ["app"]
+
+[tool.hatch.build.targets.sdist]
+# Keep source distribution minimal but functional
+include = [
+    "app",
+    "pyproject.toml",
+    "README.md",
+]
+
 [tool.ruff]
 target-version = "py311"
 line-length = 88
