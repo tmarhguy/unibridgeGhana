@@ -2,6 +2,7 @@
 
 from typing import Optional
 from uuid import UUID
+import logging
 
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
@@ -60,9 +61,13 @@ class UserService:
     @staticmethod
     async def authenticate_user(db: AsyncSession, email: str, password: str) -> Optional[User]:
         """Authenticate user with email and password."""
+        logging.info(f"Authenticating user with email: {email}")
         user = await UserService.get_user_by_email(db, email)
         if not user:
+            logging.warning(f"User with email {email} not found.")
             return None
         if not UserService.verify_password(password, user.hashed_password):
+            logging.warning(f"Password verification failed for user {email}.")
             return None
+        logging.info(f"User {email} authenticated successfully.")
         return user

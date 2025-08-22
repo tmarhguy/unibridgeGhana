@@ -1,9 +1,9 @@
-"""Security utilities for authentication and authorization."""
+"""Security utilities for UniBridge GH."""
 
 from datetime import datetime, timedelta
-from typing import Any, Dict, Optional, Union
+from typing import Any, Union
 
-from jose import JWTError, jwt
+from jose import jwt
 from passlib.context import CryptContext
 
 from app.core.config import get_settings
@@ -13,49 +13,20 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
 def create_access_token(
-    subject: Union[str, Any], expires_delta: Optional[timedelta] = None
+    data: dict, expires_delta: Union[timedelta, None] = None
 ) -> str:
-    """Create a JWT access token."""
+    """Create JWT access token."""
     settings = get_settings()
+    to_encode = data.copy()
     
     if expires_delta:
         expire = datetime.utcnow() + expires_delta
     else:
-        expire = datetime.utcnow() + timedelta(
-            minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES
-        )
+        expire = datetime.utcnow() + timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
     
-    to_encode = {"exp": expire, "sub": str(subject)}
-    encoded_jwt = jwt.encode(
-        to_encode, settings.JWT_SECRET_KEY, algorithm=settings.JWT_ALGORITHM
-    )
+    to_encode.update({"exp": expire})
+    encoded_jwt = jwt.encode(to_encode, settings.SECRET_KEY, algorithm=settings.ALGORITHM)
     return encoded_jwt
-
-
-def create_refresh_token(subject: Union[str, Any]) -> str:
-    """Create a JWT refresh token."""
-    settings = get_settings()
-    
-    expire = datetime.utcnow() + timedelta(days=settings.REFRESH_TOKEN_EXPIRE_DAYS)
-    to_encode = {"exp": expire, "sub": str(subject), "type": "refresh"}
-    
-    encoded_jwt = jwt.encode(
-        to_encode, settings.JWT_SECRET_KEY, algorithm=settings.JWT_ALGORITHM
-    )
-    return encoded_jwt
-
-
-def verify_token(token: str) -> Optional[Dict[str, Any]]:
-    """Verify and decode a JWT token."""
-    settings = get_settings()
-    
-    try:
-        payload = jwt.decode(
-            token, settings.JWT_SECRET_KEY, algorithms=[settings.JWT_ALGORITHM]
-        )
-        return payload
-    except JWTError:
-        return None
 
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
@@ -66,3 +37,38 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
 def get_password_hash(password: str) -> str:
     """Generate password hash."""
     return pwd_context.hash(password)
+
+
+def verify_token(token: str) -> Union[dict, None]:
+    """Verify JWT token and return payload."""
+    try:
+        settings = get_settings()
+        payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
+        return payload
+    except jwt.JWTError:
+        return None
+
+
+def generate_password_reset_token(email: str) -> str:
+    """Generate password reset token."""
+    settings = get_settings()
+    delta = timedelta(hours=settings.EMAIL_RESET_TOKEN_EXPIRE_HOURS)
+    now = datetime.utcnow()
+    expires = now + delta
+    exp = expires.timestamp()
+    encoded_jwt = jwt.encode(
+        {"exp": exp, "nbf": now, "sub": email},
+        settings.SECRET_KEY,
+        algorithm=settings.ALGORITHM,
+    )
+    return encoded_jwt
+
+
+def verify_password_reset_token(token: str) -> Union[str, None]:
+    """Verify password reset token and return email."""
+    try:
+        settings = get_settings()
+        decoded_token = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
+        return decoded_token["sub"]
+    except jwt.JWTError:
+        return None

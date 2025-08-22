@@ -1,14 +1,15 @@
-"""Authentication router."""
+"""Authentication router for UniBridge GH."""
 
-from datetime import timedelta
-from typing import Any
+from datetime import datetime, timedelta
+from typing import Any, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from jose import JWTError, jwt
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.config import get_settings
-from app.core.security import create_access_token, verify_token, verify_password
+from app.core.security import create_access_token, get_password_hash, verify_password
 from app.db.session import get_session
 from app.schemas.auth import Token, UserCreate, UserResponse
 from app.services.user import UserService
@@ -21,40 +22,27 @@ async def get_current_user_dependency(
     token: str = Depends(oauth2_scheme),
     session: AsyncSession = Depends(get_session)
 ) -> UserResponse:
-    """Dependency to get current authenticated user."""
+    """Get current user from JWT token."""
+    credentials_exception = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Could not validate credentials",
+        headers={"WWW-Authenticate": "Bearer"},
+    )
+    
     try:
-        payload = verify_token(token)
-        user_id = payload.get("sub")
+        settings = get_settings()
+        payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
+        user_id: str = payload.get("sub")
         if user_id is None:
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Could not validate credentials",
-                headers={"WWW-Authenticate": "Bearer"},
-            )
-    except Exception:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Could not validate credentials",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
+            raise credentials_exception
+    except JWTError:
+        raise credentials_exception
     
     user = await UserService.get_user(session, user_id)
     if user is None:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="User not found",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
+        raise credentials_exception
     
-    return UserResponse(
-        id=user.id,
-        email=user.email,
-        first_name=user.first_name,
-        last_name=user.last_name,
-        phone=user.phone,
-        role=user.role,
-        is_active=user.is_active
-    )
+    return UserResponse.from_orm(user)
 
 
 @router.post("/register", response_model=UserResponse, status_code=status.HTTP_201_CREATED)
@@ -81,33 +69,24 @@ async def login(
     form_data: OAuth2PasswordRequestForm = Depends(),
     session: AsyncSession = Depends(get_session)
 ) -> Any:
-    """Login and get access token."""
-    # Get user by email
-    user = await UserService.get_user_by_email(session, form_data.username)
-    if not user or not verify_password(form_data.password, user.hashed_password):
+    """Login user and return access token."""
+    # Authenticate user
+    user = await UserService.authenticate_user(session, form_data.username, form_data.password)
+    if not user:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Incorrect email or password",
             headers={"WWW-Authenticate": "Bearer"},
         )
     
-    if not user.is_active:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Inactive user"
-        )
-    
     # Create access token
     settings = get_settings()
     access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = create_access_token(
-        subject=str(user.id), expires_delta=access_token_expires
+        data={"sub": str(user.id)}, expires_delta=access_token_expires
     )
     
-    return {
-        "access_token": access_token,
-        "token_type": "bearer"
-    }
+    return {"access_token": access_token, "token_type": "bearer"}
 
 
 @router.get("/me", response_model=UserResponse)
@@ -118,33 +97,22 @@ async def get_current_user(
     return current_user
 
 
-async def get_current_user_dependency(
-    token: str = Depends(oauth2_scheme),
+@router.post("/refresh", response_model=Token)
+async def refresh_token(
+    current_user: UserResponse = Depends(get_current_user_dependency),
     session: AsyncSession = Depends(get_session)
-) -> UserResponse:
-    """Dependency to get current authenticated user."""
-    from app.core.security import verify_token
-    from app.services.user import UserService
-    
-    credentials_exception = HTTPException(
-        status_code=status.HTTP_401_UNAUTHORIZED,
-        detail="Could not validate credentials",
-        headers={"WWW-Authenticate": "Bearer"},
+) -> Any:
+    """Refresh access token."""
+    settings = get_settings()
+    access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
+    access_token = create_access_token(
+        data={"sub": str(current_user.id)}, expires_delta=access_token_expires
     )
     
-    # Verify token
-    payload = verify_token(token)
-    if payload is None:
-        raise credentials_exception
-    
-    user_id = payload.get("sub")
-    if user_id is None:
-        raise credentials_exception
-    
-    # Get user from database
-    user_service = UserService(session)
-    user = await user_service.get_by_id(user_id)
-    if user is None:
-        raise credentials_exception
-    
-    return user
+    return {"access_token": access_token, "token_type": "bearer"}
+
+
+@router.post("/logout")
+async def logout() -> Any:
+    """Logout user (client-side token removal)."""
+    return {"message": "Successfully logged out"}

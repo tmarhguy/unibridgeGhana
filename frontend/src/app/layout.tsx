@@ -1,5 +1,5 @@
 import './globals.css'
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { Inter } from 'next/font/google'
 import { Providers } from './providers'
 import ChatBot from '@/components/ChatBot'
@@ -12,8 +12,6 @@ export const metadata: Metadata = {
   keywords: ['Ghana', 'University', 'Application', 'Education', 'Admissions'],
   authors: [{ name: 'UniBridge GH Team' }],
   manifest: '/manifest.json',
-  themeColor: '#10b981',
-  viewport: 'width=device-width, initial-scale=1',
   openGraph: {
     title: 'UniBridge GH',
     description: 'Unified application platform for Ghanaian tertiary admissions',
@@ -35,6 +33,12 @@ export const metadata: Metadata = {
   },
 }
 
+export const viewport: Viewport = {
+  themeColor: '#10b981',
+  width: 'device-width',
+  initialScale: 1,
+}
+
 export default function RootLayout({
   children,
 }: {
@@ -46,7 +50,6 @@ export default function RootLayout({
         <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
         <link rel="icon" href="/favicon-16x16.svg" type="image/svg+xml" sizes="16x16" />
         <link rel="manifest" href="/manifest.json" />
-        <meta name="theme-color" content="#10b981" />
       </head>
       <body className={inter.className}>
         <Providers>

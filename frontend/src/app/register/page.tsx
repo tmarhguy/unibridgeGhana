@@ -7,7 +7,8 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { BookOpen, CheckCircle } from "lucide-react"
+import { BookOpen, CheckCircle, AlertCircle } from "lucide-react"
+import { useAuth } from "@/contexts/AuthContext"
 
 export default function RegisterPage() {
   const [isLoading, setIsLoading] = useState(false)
@@ -17,9 +18,12 @@ export default function RegisterPage() {
     email: "",
     password: "",
     confirmPassword: "",
+    phone: "",
     agreeToTerms: false
   })
+  const [error, setError] = useState("")
   const router = useRouter()
+  const { register } = useAuth()
 
   const handleInputChange = (field: string, value: string | boolean) => {
     setFormData(prev => ({
@@ -31,32 +35,33 @@ export default function RegisterPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
+    setError("")
 
     try {
       // Validation
       if (formData.password !== formData.confirmPassword) {
-        alert("Passwords don't match")
+        setError("Passwords don't match")
         return
       }
 
       if (!formData.agreeToTerms) {
-        alert("Please agree to the terms and conditions")
+        setError("Please agree to the terms and conditions")
         return
       }
 
-      // TODO: Implement actual registration
-      console.log("Registration attempt:", formData)
+      // Register user
+      await register({
+        email: formData.email,
+        password: formData.password,
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        phone: formData.phone || "+233000000000"
+      })
       
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000))
-      
-      // Check for redirect parameter or go to dashboard
-      const urlParams = new URLSearchParams(window.location.search)
-      const redirectTo = urlParams.get('redirect') || '/dashboard'
-      
-      router.push(redirectTo)
-    } catch (error) {
+      // Registration will auto-login and redirect to dashboard
+    } catch (error: any) {
       console.error("Registration failed:", error)
+      setError(error.message || "Registration failed")
     } finally {
       setIsLoading(false)
     }
@@ -73,6 +78,17 @@ export default function RegisterPage() {
           </Link>
           <h1 className="text-3xl font-bold text-gray-900">Create your account</h1>
           <p className="text-gray-600 mt-2">Join thousands of students applying to Ghanaian universities</p>
+        </div>
+
+        {/* Development Notice */}
+        <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+          <div className="flex items-center space-x-2">
+            <AlertCircle className="h-5 w-5 text-yellow-600" />
+            <span className="text-sm font-medium text-yellow-800">Development Mode</span>
+          </div>
+          <p className="text-sm text-yellow-700 mt-1">
+            Registration is temporarily bypassed. Any valid form will create an account.
+          </p>
         </div>
 
         {/* Registration Form */}
@@ -121,6 +137,17 @@ export default function RegisterPage() {
                   required
                 />
               </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="phone">Phone Number</Label>
+                <Input
+                  id="phone"
+                  type="tel"
+                  placeholder="+233000000000"
+                  value={formData.phone}
+                  onChange={(e) => handleInputChange("phone", e.target.value)}
+                />
+              </div>
               
               <div className="space-y-2">
                 <Label htmlFor="password">Password</Label>
@@ -167,6 +194,12 @@ export default function RegisterPage() {
                   </Link>
                 </Label>
               </div>
+
+              {error && (
+                <div className="bg-red-50 border border-red-200 rounded-md p-3">
+                  <p className="text-sm text-red-600">{error}</p>
+                </div>
+              )}
 
               <Button 
                 type="submit" 

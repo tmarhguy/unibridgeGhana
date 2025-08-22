@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { BookOpen } from "lucide-react"
+import { BookOpen, AlertCircle } from "lucide-react"
 import { useAuth } from "@/contexts/AuthContext"
 
 export default function LoginPage() {
@@ -24,6 +24,7 @@ export default function LoginPage() {
     setError("")
 
     try {
+      console.log("Attempting login with email:", email)
       await login(email, password)
       
       // Check for redirect parameter
@@ -50,6 +51,17 @@ export default function LoginPage() {
           </Link>
           <h1 className="text-3xl font-bold text-gray-900">Welcome back</h1>
           <p className="text-gray-600 mt-2">Sign in to your account to continue</p>
+        </div>
+
+        {/* Development Notice */}
+        <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+          <div className="flex items-center space-x-2">
+            <AlertCircle className="h-5 w-5 text-yellow-600" />
+            <span className="text-sm font-medium text-yellow-800">Development Mode</span>
+          </div>
+          <p className="text-sm text-yellow-700 mt-1">
+            Authentication is temporarily bypassed. Any email/password combination will work.
+          </p>
         </div>
 
         {/* Login Form */}

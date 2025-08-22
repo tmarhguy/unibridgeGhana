@@ -358,71 +358,7 @@ const MyUniversities: React.FC = () => {
             Manage your university applications, track deadlines, and monitor your progress
           </p>
 
-          {/* Compact Overview & Stats - Single Container */}
-          {myUniversities.length > 0 && (
-            <div className="bg-gray-50 rounded-lg p-3 mb-4">
-              <div className="flex items-center justify-between">
-                {/* Left: College List Pills */}
-                <div className="flex-1">
-                  <div className="flex flex-wrap gap-1 mb-2">
-                    {myUniversities.map((uni) => {
-                      const daysUntilDeadline = Math.ceil((uni.deadline.getTime() - new Date().getTime()) / (1000 * 3600 * 24))
-                      const isOverdue = daysUntilDeadline < 0
-                      const isDeadlineSoon = daysUntilDeadline <= 7 && daysUntilDeadline >= 0
-                      
-                      return (
-                        <span
-                          key={uni.id}
-                          className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium border ${
-                            uni.decision === 'Admitted' ? 'bg-green-100 text-green-800 border-green-200' :
-                            uni.decision === 'Rejected' ? 'bg-red-100 text-red-800 border-red-200' :
-                            uni.decision === 'Waitlisted' ? 'bg-yellow-100 text-yellow-800 border-yellow-200' :
-                            isOverdue ? 'bg-red-50 text-red-700 border-red-200' :
-                            isDeadlineSoon ? 'bg-orange-50 text-orange-700 border-orange-200' :
-                            uni.applicationStatus === 'Submitted' ? 'bg-blue-100 text-blue-800 border-blue-200' :
-                            uni.applicationStatus === 'In Progress' ? 'bg-purple-100 text-purple-800 border-purple-200' :
-                            'bg-gray-100 text-gray-800 border-gray-200'
-                          }`}
-                        >
-                          {uni.shortName || uni.name.split(' ').map(word => word[0]).join('')}
-                          {uni.decision && (
-                            <span className="ml-1 text-xs">
-                              {uni.decision === 'Admitted' ? '✓' : 
-                               uni.decision === 'Rejected' ? '✗' : 
-                               uni.decision === 'Waitlisted' ? '⏳' : ''}
-                            </span>
-                          )}
-                        </span>
-                      )
-                    })}
-                  </div>
-                  <div className="text-xs text-gray-600">
-                    {myUniversities.length} universities • {myUniversities.filter(uni => uni.applicationStatus === 'Submitted' || uni.applicationStatus === 'Under Review' || uni.applicationStatus === 'Decided').length} submitted • {myUniversities.filter(uni => uni.decision === 'Admitted').length} admitted
-                  </div>
-                </div>
 
-                {/* Right: Quick Stats */}
-                <div className="flex gap-4 text-xs">
-                  <div className="text-center">
-                    <div className="font-semibold text-blue-600">{myUniversities.length}</div>
-                    <div className="text-gray-500">Unis</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="font-semibold text-green-600">{myUniversities.filter(uni => uni.applicationStatus === 'Submitted' || uni.applicationStatus === 'Under Review' || uni.applicationStatus === 'Decided').length}</div>
-                    <div className="text-gray-500">Sent</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="font-semibold text-orange-600">GHS {totalApplicationFees}</div>
-                    <div className="text-gray-500">Fees</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="font-semibold text-purple-600">{myUniversities.filter(uni => uni.decision === 'Admitted').length}</div>
-                    <div className="text-gray-500">In</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
         </div>
 
         {/* Controls - Compact Layout */}

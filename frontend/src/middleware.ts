@@ -1,30 +1,10 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
-// Routes that require authentication
-const protectedRoutes = [
-  '/dashboard',
-  '/common-application',
-  '/my-universities',
-  '/documents',
-  '/payments',
-  '/scholarships',
-  '/analytics',
-  '/onboarding'
-]
-
-// Routes that should redirect to dashboard if user is already authenticated
-const authRoutes = ['/login', '/register']
-
+// TEMPORARY: Authentication bypass - allow all requests
 export function middleware(request: NextRequest) {
-  const { pathname } = request.nextUrl
-  
-  // Simple token check - in a real app, you'd validate the JWT properly
-  // For now, we'll rely on client-side authentication checks in ProtectedRoute components
-  // This middleware provides basic routing protection
-  
-  // Allow all requests to pass through initially
-  // The ProtectedRoute components will handle the actual authentication checks
+  // 🔓 AUTHENTICATION BYPASSED: Allow all requests to pass through
+  console.log('🔓 MIDDLEWARE: Allowing request to', request.nextUrl.pathname)
   return NextResponse.next()
 }
 
