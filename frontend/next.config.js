@@ -13,8 +13,7 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
-  assetPrefix: process.env.NODE_ENV === 'production' ? '/unibridgeGhana' : '',
-  basePath: process.env.NODE_ENV === 'production' ? '/unibridgeGhana' : '',
+  // Remove basePath and assetPrefix for docs folder deployment
   env: {
     NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api/v1',
   },
