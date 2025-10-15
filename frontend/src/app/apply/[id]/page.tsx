@@ -1,6 +1,15 @@
 "use client"
 
 import { useState, useEffect } from "react"
+
+// Generate static params for static export
+export async function generateStaticParams() {
+  return [
+    { id: '1' },
+    { id: '2' },
+    { id: '3' },
+  ]
+}
 import { useRouter, useParams } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"

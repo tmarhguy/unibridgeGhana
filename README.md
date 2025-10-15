@@ -21,10 +21,12 @@
 ## Table of Contents
 
 - [Project Overview](#project-overview)
+- [Live Demo](#live-demo)
 - [Key Features](#key-features)
 - [Screenshots](#screenshots)
 - [Architecture & Technology Stack](#architecture--technology-stack)
 - [Installation & Setup](#installation--setup)
+- [GitHub Pages Deployment](#github-pages-deployment)
 - [Usage Instructions](#usage-instructions)
 - [API Documentation](#api-documentation)
 - [Contributing](#contributing)
@@ -34,6 +36,12 @@
 ## Project Overview
 
 UniBridge Ghana eliminates the traditional barriers of university applications by providing a centralized platform where students complete one comprehensive application and apply to multiple institutions simultaneously. The platform serves as Ghana's equivalent to the Common Application used in the United States, specifically designed for the Ghanaian educational ecosystem.
+
+## Live Demo
+
+🌐 **Try the live demo**: [https://tmarhguy.github.io/unibridgeGhana/](https://tmarhguy.github.io/unibridgeGhana/)
+
+The GitHub Pages version showcases the complete user interface with mock data, demonstrating the platform's potential for revolutionizing university admissions in Ghana.
 
 ### Problem Statement
 
@@ -199,6 +207,25 @@ graph TD
 ├── notifications (real-time messaging system)
 └── audit_logs (comprehensive activity tracking)
 ```
+
+## GitHub Pages Deployment
+
+This project includes a GitHub Pages deployment configuration for showcasing the frontend interface. The static version is automatically deployed to [https://tmarhguy.github.io/unibridgeGhana/](https://tmarhguy.github.io/unibridgeGhana/) whenever changes are pushed to the main branch.
+
+### Features of the GitHub Pages Version
+
+- **Static Site Generation**: Optimized Next.js build for static hosting
+- **Mock Data**: Realistic sample data for universities, applications, and scholarships
+- **Demo Authentication**: Bypassed authentication for easy testing
+- **Responsive Design**: Full mobile and desktop compatibility
+- **Automated Deployment**: GitHub Actions workflow for seamless updates
+
+### Demo Credentials
+
+For testing the GitHub Pages version:
+- **Email**: Any valid email format (e.g., `demo@example.com`)
+- **Password**: Any password
+- Authentication is bypassed for demonstration purposes
 
 ## Installation & Setup
 
