@@ -1,6 +1,14 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'export',
+  // Only use static export when STATIC_EXPORT env var is set (for GitHub Pages)
+  // Disable for dev mode to allow middleware and dynamic routes
+  ...(process.env.STATIC_EXPORT === 'true' 
+    ? { 
+        output: 'export',
+        basePath: '/unibridgeGhana',
+        assetPrefix: '/unibridgeGhana',
+      } 
+    : {}),
   trailingSlash: true,
   skipTrailingSlashRedirect: true,
   distDir: 'dist',
@@ -13,11 +21,9 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
-  // Remove basePath and assetPrefix for docs folder deployment
   env: {
     NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api/v1',
   },
-  // Remove API rewrites for static export
 }
 
 module.exports = nextConfig
