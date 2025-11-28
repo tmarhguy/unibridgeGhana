@@ -14,6 +14,11 @@ npm install
 echo "🏗️ Building static site..."
 npm run build:static
 
+# Move build output to docs folder
+echo "📂 Moving build output to docs/..."
+rm -rf ../docs/*
+cp -r dist/* ../docs/
+
 # Create .nojekyll file to bypass Jekyll processing
 echo "🔧 Creating .nojekyll file..."
 touch ../docs/.nojekyll

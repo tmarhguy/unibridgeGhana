@@ -11,24 +11,24 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
       {/* Navigation Header */}
-      <nav className="bg-white shadow-sm sticky top-0 z-50">
+      <nav className="glass-nav sticky top-0 z-50">
         <div className="max-w-6xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-gradient-to-r from-emerald-500 to-blue-500 rounded-lg flex items-center justify-center">
+              <div className="w-8 h-8 bg-gradient-to-r from-emerald-500 to-blue-500 rounded-lg flex items-center justify-center shadow-md">
                 <span className="text-white font-bold text-sm">U</span>
               </div>
               <span className="text-xl font-bold text-gray-900">UniBridge Ghana</span>
             </div>
-            
+
             <div className="flex items-center gap-4">
               <Link href="/login">
-                <Button variant="outline" className="border-emerald-600 text-emerald-600 hover:bg-emerald-50">
+                <Button variant="outline" className="border-emerald-600 text-emerald-600 hover:bg-emerald-50 transition-all hover:scale-105">
                   Login
                 </Button>
               </Link>
               <Link href="/register">
-                <Button className="bg-emerald-600 hover:bg-emerald-700 text-white">
+                <Button className="bg-emerald-600 hover:bg-emerald-700 text-white shadow-md hover:shadow-lg transition-all hover:scale-105">
                   Get Started
                 </Button>
               </Link>
@@ -36,7 +36,7 @@ export default function HomePage() {
           </div>
         </div>
       </nav>
-      
+
       <Hero />
       <Features />
       <Process />
@@ -51,7 +51,7 @@ export default function HomePage() {
               </div>
               <span className="text-xl font-bold">UniBridge Ghana</span>
             </div>
-            
+
             <div className="flex flex-wrap gap-6 text-sm text-gray-400">
               <Link href="/login" className="hover:text-white">Apply</Link>
               <Link href="/login" className="hover:text-white">Universities</Link>
@@ -59,7 +59,7 @@ export default function HomePage() {
               <Link href="/login" className="hover:text-white">Dashboard</Link>
             </div>
           </div>
-          
+
           <div className="border-t border-gray-800 mt-6 pt-6 text-center text-sm text-gray-400">
             <p>&copy; 2025 UniBridge Ghana. Connecting students to their future.</p>
           </div>

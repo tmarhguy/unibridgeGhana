@@ -11,7 +11,7 @@ const nextConfig = {
     : {}),
   trailingSlash: true,
   skipTrailingSlashRedirect: true,
-  distDir: '../docs',
+  distDir: 'dist',
   eslint: {
     ignoreDuringBuilds: true,
   },
