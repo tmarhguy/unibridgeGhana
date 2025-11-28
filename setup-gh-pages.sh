@@ -14,10 +14,14 @@ npm install
 echo "🏗️ Building static site..."
 npm run build:static
 
+# Create .nojekyll file to bypass Jekyll processing
+echo "🔧 Creating .nojekyll file..."
+touch ../docs/.nojekyll
+
 echo "✅ Setup complete!"
 echo ""
 echo "🌐 Your site is ready for GitHub Pages deployment"
-echo "📁 Static files are in: frontend/dist/"
+echo "📁 Static files are in: docs/"
 echo "🔗 Once deployed, your site will be available at:"
 echo "   https://tmarhguy.github.io/unibridgeGhana/"
 echo ""

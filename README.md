@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="docs/logo.svg" alt="UniBridge Ghana Logo" width="300" />
+  <img src="frontend/public/docs/logo.svg" alt="UniBridge Ghana Logo" width="300" />
 </div>
 
 <div align="center">
@@ -108,28 +108,28 @@ UniBridge provides:
 ### Core Platform Overview
 
 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem; margin-bottom: 1rem;">
-  <img src="docs/screenshots/landing-page.png" alt="UniBridge Ghana landing page with call-to-action button and feature highlights" loading="lazy" />
-  <img src="docs/screenshots/dashboard.png" alt="Student dashboard showing application progress and university recommendations" loading="lazy" />
+  <img src="frontend/public/docs/screenshots/landing-page.png" alt="UniBridge Ghana landing page with call-to-action button and feature highlights" loading="lazy" />
+  <img src="frontend/public/docs/screenshots/dashboard.png" alt="Student dashboard showing application progress and university recommendations" loading="lazy" />
 </div>
 <p align="center"><em>Landing page and student dashboard interface</em></p>
 
 ### Application Management & Direct Admissions
 
 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem; margin-bottom: 1rem;">
-  <img src="docs/screenshots/application-progress.png" alt="Application progress tracker with timeline and status indicators" loading="lazy" />
-  <img src="docs/screenshots/direct-admissions.png" alt="Fast-track admissions interface for qualified candidates" loading="lazy" />
+  <img src="frontend/public/docs/screenshots/application-progress.png" alt="Application progress tracker with timeline and status indicators" loading="lazy" />
+  <img src="frontend/public/docs/screenshots/direct-admissions.png" alt="Fast-track admissions interface for qualified candidates" loading="lazy" />
 </div>
 <p align="center"><em>Application tracking and streamlined admissions workflow</em></p>
 
 ### Financial Aid & Analytics Platform
 
 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem; margin-bottom: 1rem;">
-  <img src="docs/screenshots/scholarship-search.png" alt="Scholarship search interface with filtering and application tracking" loading="lazy" />
-  <img src="docs/screenshots/analytics.png" alt="University analytics dashboard with institutional data and trends" loading="lazy" />
+  <img src="frontend/public/docs/screenshots/scholarship-search.png" alt="Scholarship search interface with filtering and application tracking" loading="lazy" />
+  <img src="frontend/public/docs/screenshots/analytics.png" alt="University analytics dashboard with institutional data and trends" loading="lazy" />
 </div>
 <p align="center"><em>Financial aid discovery and comprehensive university analytics</em></p>
 
-> **📷 Visual Documentation**: For additional screenshots, mobile views, and admin interfaces, see [docs/screenshots/](docs/screenshots/README.md)
+> **📷 Visual Documentation**: For additional screenshots, mobile views, and admin interfaces, see [frontend/public/docs/screenshots/](frontend/public/docs/screenshots/README.md)
 
 ## Architecture & Technology Stack
 
